@@ -70,8 +70,6 @@ Slide Deck (built manually from outputs)
 
 ```
 .
-├── assets/
-│   └── architecture.png
 │
 ├── data/
 │   └── raw_transcripts/
