@@ -1,0 +1,93 @@
+{
+  "categories": [
+    {
+      "name": "Platform Reliability & Outages",
+      "description": "Calls addressing system downtime, service degradation, incident response, root cause analysis, post-incident remediation, and post-incident customer communication (explaining outage impact, providing incident documentation, confirming recovery). Includes both customer-facing discussions and internal engineering reviews of reliability issues. (Merged from two originally-proposed categories -- 'Platform Reliability & Outages' and 'Post-Incident Customer Communication' -- since the second was really a downstream stage of the same topic rather than a distinct theme; the bonus insights notebook's incident_stage field already captures that stage-level distinction for anyone who needs it.)",
+      "example_call_ids": [
+        "01KQE110900B8A65D80AE694",
+        "01KQ3F90FF9EBC3DB3632514",
+        "01KQ764171AC27A3A94DC695",
+        "01KQ5D47170D4828E89EDE37",
+        "01KQC1267BEB344076DD7656"
+      ]
+    },
+    {
+      "name": "Renewal Risk & Churn Prevention",
+      "description": "Calls where contract renewal is at risk due to product issues, competitive evaluation, or customer dissatisfaction. Includes account recovery efforts and discussions of conditions required to retain the customer.",
+      "example_call_ids": [
+        "01KQ7FA71CF70FAFEE4B6251",
+        "01KQC1267BEB344076DD7656",
+        "01KQ56D878454E5783DC6D94"
+      ]
+    },
+    {
+      "name": "Billing & Licensing Issues",
+      "description": "Calls addressing invoice discrepancies, overage charges, proration errors, seat count mismatches, license upgrade billing problems, and usage/capacity overages that drive billing impact. Typically requires finance team involvement or billing adjustments. (Folded the originally-proposed 'Usage & Capacity Management' category in here -- it only had 2 supporting examples and its own description was framed entirely around billing impact of usage overages, making it a sub-case of this category rather than a distinct theme.)",
+      "example_call_ids": [
+        "01KQ773D68723289E4A98889",
+        "01KQB632F1ADC378C42F2C03",
+        "01KQ0C1280EDA4E70AAD7C35"
+      ]
+    },
+    {
+      "name": "Compliance & Audit Preparation",
+      "description": "Calls focused on regulatory compliance frameworks (SOC 2, PCI DSS, ISO 27001, HIPAA), audit readiness, evidence collection automation, and compliance reporting capabilities. Often involves the Comply module.",
+      "example_call_ids": [
+        "01KQAFB8DBF6E1E2FDEF0B75",
+        "01KQC1267BEB344076DD7656",
+        "01KQD199788883B6F18C81E8"
+      ]
+    },
+    {
+      "name": "New Customer Onboarding & Implementation",
+      "description": "Initial deployment planning, technical setup, timeline discussions, and kickoff calls for new customers or new module rollouts. Includes migration planning and integration scoping.",
+      "example_call_ids": [
+        "01KQC3A2EBC501837E973B16",
+        "01KQ77F2867FC54E13A8C495",
+        "01KQAFB8DBF6E1E2FDEF0B75"
+      ]
+    },
+    {
+      "name": "Integration & Technical Configuration",
+      "description": "Calls addressing third-party integrations (Okta, PagerDuty, LogVault), API usage, SCIM provisioning, SSO setup, and technical configuration challenges. Includes both troubleshooting and implementation planning.",
+      "example_call_ids": [
+        "01KQ56D878454E5783DC6D94",
+        "01KQ5F364545B542671FF9CE",
+        "01KQC3A2EBC501837E973B16"
+      ]
+    },
+    {
+      "name": "Feature Gaps & Roadmap Requests",
+      "description": "Calls where customers request features not yet available, discuss product roadmap timing, or need workarounds for missing functionality. Often results in feature request logging and account manager escalation.",
+      "example_call_ids": [
+        "01KQ5F364545B542671FF9CE",
+        "01KQD199788883B6F18C81E8",
+        "01KQ7FA71CF70FAFEE4B6251"
+      ]
+    },
+    {
+      "name": "Positive Renewal & Expansion",
+      "description": "Healthy renewal discussions, annual reviews with satisfied customers, and upsell/cross-sell opportunities. Customers express satisfaction and interest in expanding usage or adding modules. (Kept separate from 'Renewal Risk & Churn Prevention' despite both being renewal-stage calls, because they call for opposite actions from an account team -- one needs intervention, the other doesn't -- which is exactly the kind of distinction a sales/CS leader would want preserved rather than collapsed.)",
+      "example_call_ids": [
+        "01KQD199788883B6F18C81E8",
+        "01KQAFB8DBF6E1E2FDEF0B75"
+      ]
+    },
+    {
+      "name": "Internal Sprint & Development Planning",
+      "description": "Internal engineering team calls covering sprint planning, retrospectives, story point estimation, technical debt, and development capacity allocation. Includes architectural design discussions and backlog prioritization.",
+      "example_call_ids": [
+        "01KQ5BB8521F99E55470206E",
+        "01KQ3F90FF9EBC3DB3632514"
+      ]
+    },
+    {
+      "name": "Cross-Functional Business Reviews",
+      "description": "Internal all-hands or leadership calls reviewing company-wide metrics, product launch timelines, customer success updates, competitive losses, and strategic priority setting across departments.",
+      "example_call_ids": [
+        "01KQADF3D76E82BF8BA19AF2",
+        "01KQ764171AC27A3A94DC695"
+      ]
+    }
+  ]
+}
