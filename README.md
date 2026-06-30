@@ -1,108 +1,451 @@
-# Transcript Intelligence 
+# Transcript Intelligence
 
-Pipeline for categorizing, sentiment-scoring, and extracting cross-functional
-insights from 100 B2B SaaS call transcripts (support, external, internal)
-from a fictional cybersecurity/compliance company, "Aegis Cloud."
+> AI-powered enterprise transcript analytics platform that automatically categorizes conversations, analyzes sentiment, and extracts cross-functional business insights using Large Language Models (LLMs).
 
-## Setup
+Built as an Applied AI Engineering project demonstrating LLM orchestration, structured outputs, enterprise analytics, and product-focused insight generation.
+
+---
+
+## 🚀 Highlights
+
+- Hybrid **LLM + Human-Reviewed Taxonomy** topic classification
+- Multi-dimensional sentiment analysis beyond simple positive/negative labels
+- Cross-functional incident timeline reconstruction
+- Executive-ready visualizations and business insights
+- Modular, reproducible AI pipeline with clean project structure
+
+---
+
+# Business Problem
+
+Enterprise organizations generate thousands of meeting transcripts every month across Customer Support, Sales, Product, and Engineering teams.
+
+While these conversations contain valuable business intelligence, manually reviewing them is:
+
+- Time-consuming
+- Expensive
+- Difficult to scale
+- Inconsistent across reviewers
+
+This project demonstrates how an AI-powered transcript intelligence platform can automatically transform unstructured conversations into actionable insights for business leaders.
+
+---
+
+# Architecture
+
+> **Replace the image below with your architecture diagram (assets/architecture.png).**
+
+<p align="center">
+<img src="assets/architecture.png" width="900">
+</p>
+
+The pipeline follows a modular architecture:
+
+```
+Raw Transcripts
+        │
+        ▼
+Data Loading & Cleaning
+        │
+        ▼
+Call Type Detection
+        │
+        ▼
+Hybrid Topic Categorization
+        │
+        ▼
+Sentiment Analysis
+        │
+        ▼
+Business Insight Generation
+        │
+        ▼
+Visualizations & Reports
+```
+
+---
+
+# Repository Structure
+
+```
+.
+├── assets/
+│   └── architecture.png
+│
+├── data/
+│   └── raw_transcripts/
+│
+├── notebooks/
+│   ├── 00_data_exploration.ipynb
+│   ├── 01_categorization.ipynb
+│   ├── 02_sentiment.ipynb
+│   └── 03_bonus_insights.ipynb
+│
+├── outputs/
+│   ├── figures/
+│   ├── categorization_results.csv
+│   ├── sentiment_results.csv
+│   ├── incident_blast_radius_timeline.csv
+│   └── taxonomy_FINAL.json
+│
+├── src/
+│   ├── load_data.py
+│   ├── llm_client.py
+│   ├── categorize.py
+│   ├── sentiment.py
+│   └── outage_blast_radius.py
+│
+├── requirements.txt
+├── .env.example
+└── README.md
+```
+
+---
+
+# Dataset
+
+The project uses approximately **100 enterprise SaaS call transcripts** provided as part of the interview assignment.
+
+The dataset contains conversations across:
+
+- Customer Support
+- External Customer Calls
+- Internal Engineering & Product Meetings
+
+The original dataset is preserved unchanged under:
+
+```
+data/raw_transcripts/
+```
+
+---
+
+# Installation
+
+Clone the repository
 
 ```bash
-# 1. Install dependencies
+git clone <repository-url>
+
+cd transcript-intelligence
+```
+
+Install dependencies
+
+```bash
 pip install -r requirements.txt
-
-# 2. Add your API key
-cp .env.example .env
-# edit .env and paste your OpenRouter key:
-#   OPENROUTER_API_KEY=sk-or-v1-...
-# (get one at https://openrouter.ai/keys -- works with any underlying
-#  model; this project defaults to anthropic/claude-sonnet-4.5 via
-#  OpenRouter, see src/llm_client.py to swap models)
 ```
 
-## Project structure
-
-```
-data/raw_transcripts/        100 transcript folders (untouched, as provided)
-src/
-  load_data.py                loads + flattens all 100 transcripts into one DataFrame,
-                               derives call_type (support/external/internal)
-  llm_client.py                OpenRouter API wrapper (reads key from .env)
-  categorize.py                Task 1: topic/theme categorization pipeline
-  sentiment.py                 Task 2: sentiment analysis pipeline
-  outage_blast_radius.py       Bonus insight: cross-functional incident timeline
-notebooks/
-  00_data_exploration.ipynb    Initial data profiling -- call type derivation, date range, customer mix
-  01_categorization.ipynb      Task 1 walkthrough + charts + reasoning
-  02_sentiment.ipynb           Task 2 walkthrough + trend charts + reasoning
-  03_bonus_insights.ipynb      Bonus insight walkthrough + 2 more ideas (described, not built)
-outputs/                       Generated CSVs, charts, and the final locked taxonomy
-```
-
-## Running the pipeline end to end
+Configure environment variables
 
 ```bash
-cd src
-
-# Task 1: categorization (run discovery first, review/edit the taxonomy,
-# then classify all 100)
-python categorize.py                 # step 1: proposes taxonomy -> outputs/discovered_taxonomy_RAW.json
-# review/edit, save final version as outputs/taxonomy_FINAL.json
-python categorize.py --classify      # step 3: classifies all 100 transcripts
-
-# Task 2: sentiment
-python sentiment.py
-
-# Bonus: incident blast-radius timeline
-python outage_blast_radius.py
+cp .env.example .env
 ```
 
-Or just open and run the notebooks in `notebooks/` in order — they call
-the same `src/` modules and include the reasoning, validation against the
-dataset's pre-existing baseline fields, and all charts.
+Add your OpenRouter API key
 
-## Key design decisions (see module docstrings for full reasoning)
+```
+OPENROUTER_API_KEY=YOUR_API_KEY
+```
 
-- **Call type** isn't in the raw data — derived via a transparent
-  title/domain heuristic (43 external / 30 internal / 27 support).
-- **Categorization** is hybrid: LLM-proposed taxonomy from a stratified
-  sample, then human-reviewed and locked down to 10 final categories
-  (`outputs/taxonomy_FINAL.json`) before classifying all 100 transcripts
-  against it with structured JSON output + per-call rationale. Two of the
-  originally-proposed 12 categories were merged during review for being
-  thin/overlapping (see the taxonomy file's `description` fields for the
-  reasoning behind each merge).
-- **Sentiment** is re-derived independently (not just reusing the
-  dataset's pre-existing `sentimentScore`), scored on customer sentiment,
-  urgency, resolution status, and trajectory — then compared against the
-  baseline as a validation check (0.95 correlation; see
-  `02_sentiment.ipynb` for an honest discussion of what that number does
-  and doesn't prove).
-- **Bonus insight** (fully built): an Incident Blast Radius Timeline
-  tracing one real outage (a "Detect" pipeline failure, March 10-18 2026)
-  across internal/external/support calls and 7 affected customer accounts,
-  showing cross-functional cost that's invisible in any single team's
-  view of the data.
+---
 
-## Notable findings
+# Running the Project
 
-- "Platform Reliability & Outages" is the only category that shows up
-  meaningfully across all three call types (25 of 100 calls), while every
-  other category lives almost entirely within one call type -- reliability
-  problems are the one thing that ripples through the whole organization.
-- External and support calls almost never resolve on the call itself
-  (2.3% and 7.4% respectively, vs. 33% for internal calls) -- ticket/call
-  volume alone says nothing about whether issues actually get closed out.
-- Call sentiment trajectory rarely worsens mid-call (67% improving, 31%
-  stable, only 2% deteriorating) -- and both deteriorating calls were
-  internal, technical-team calls discovering bad news in real time during
-  the outage, not customer-facing calls.
+## Topic Discovery
 
-## A bug worth mentioning
+Generate an initial taxonomy using a representative transcript sample.
 
-During the categorization run, one call failed classification with a JSON
-parsing error ("Extra data") caused by the model occasionally appending
-content after a complete JSON object. Fixed in `src/llm_client.py` by
-scanning for the first balanced `{...}` block instead of naively parsing
-the whole response, plus a retry before falling back to an `UNCLASSIFIED`
-label. Left as a visible example of debugging a real pipeline failure
-rather than only showing the clean final run.
+```bash
+python src/categorize.py
+```
+
+---
+
+## Review Taxonomy
+
+Review
+
+```
+outputs/discovered_taxonomy_RAW.json
+```
+
+Finalize it as
+
+```
+outputs/taxonomy_FINAL.json
+```
+
+---
+
+## Classify All Transcripts
+
+```bash
+python src/categorize.py --classify
+```
+
+Outputs
+
+- Category
+- Confidence
+- Structured reasoning
+- Supporting evidence
+
+---
+
+## Run Sentiment Analysis
+
+```bash
+python src/sentiment.py
+```
+
+Outputs
+
+- Customer sentiment
+- Urgency
+- Resolution status
+- Sentiment trajectory
+
+---
+
+## Generate Cross-functional Incident Timeline
+
+```bash
+python src/outage_blast_radius.py
+```
+
+---
+
+# Methodology
+
+## 1. Call Type Detection
+
+Since call types were not explicitly available in the raw dataset, they were derived using a transparent heuristic based on:
+
+- Meeting titles
+- Participants
+- Domains
+- Metadata
+
+Final distribution:
+
+| Call Type | Count |
+|-----------|------:|
+| External | 43 |
+| Internal | 30 |
+| Support | 27 |
+
+---
+
+## 2. Hybrid Topic Categorization
+
+A hybrid approach was chosen to balance flexibility and consistency.
+
+### Phase 1
+
+An LLM discovers candidate business topics from a stratified sample.
+
+### Phase 2
+
+The taxonomy is manually reviewed to merge overlapping categories and improve consistency.
+
+### Phase 3
+
+Every transcript is classified against the locked taxonomy using structured JSON outputs.
+
+This approach avoids inconsistent labels while preserving the flexibility of LLM-based discovery.
+
+---
+
+## 3. Multi-dimensional Sentiment Analysis
+
+Rather than relying on the provided sentiment field, sentiment is independently re-derived.
+
+Each transcript is evaluated across:
+
+- Overall sentiment
+- Customer emotion
+- Business urgency
+- Resolution status
+- Conversation trajectory
+
+The resulting scores are compared against the original dataset as a validation exercise.
+
+---
+
+## 4. Cross-functional Incident Analysis
+
+The pipeline reconstructs an enterprise outage by connecting conversations across multiple teams.
+
+Instead of viewing meetings independently, the analysis demonstrates how a single production incident propagates across:
+
+- Engineering
+- Customer Support
+- Customer Success
+- Account Management
+
+This provides organization-wide visibility into operational impact.
+
+---
+
+# Engineering Decisions
+
+| Problem | Decision | Why |
+|----------|----------|-----|
+| Topic Classification | Hybrid LLM + Locked Taxonomy | Flexible yet reproducible |
+| Sentiment | Independent re-scoring | Validate against provided baseline |
+| Pipeline | Modular Python scripts | Maintainability & testing |
+| Outputs | CSV + Figures | Easy inspection |
+| Analysis | Jupyter notebooks | Reproducible experimentation |
+
+---
+
+# Key Findings
+
+## Platform Reliability Impacts Every Team
+
+Platform Reliability & Outages was the only category consistently observed across all three call types, highlighting that infrastructure incidents create organization-wide operational impact.
+
+---
+
+## Resolution Rates Differ Significantly
+
+| Call Type | Resolved During Call |
+|-----------|--------------------:|
+| Internal | 33% |
+| Support | 7.4% |
+| External | 2.3% |
+
+Conversation volume alone is therefore not a reliable indicator of operational effectiveness.
+
+---
+
+## Most Conversations Improve
+
+Conversation trajectory:
+
+- Improving → 67%
+- Stable → 31%
+- Deteriorating → 2%
+
+Interestingly, the only deteriorating conversations occurred during internal engineering discussions while investigating an active production outage.
+
+---
+
+# Visualizations
+
+## Category Distribution
+
+<img src="outputs/figures/category_distribution.png" width="700">
+
+---
+
+## Categories by Call Type
+
+<img src="outputs/figures/category_by_call_type.png" width="700">
+
+---
+
+## Sentiment Trends
+
+<img src="outputs/figures/sentiment_over_time.png" width="700">
+
+---
+
+## Resolution Status
+
+<img src="outputs/figures/resolution_status_by_calltype.png" width="700">
+
+---
+
+## Incident Blast Radius Timeline
+
+<img src="outputs/figures/incident_blast_radius_timeline.png" width="700">
+
+---
+
+# Business Impact
+
+This pipeline demonstrates how AI can transform enterprise conversations into actionable intelligence.
+
+Potential applications include:
+
+- Automated transcript categorization
+- Customer pain-point discovery
+- Feature request mining
+- Engineering incident tracking
+- Customer churn detection
+- Executive dashboards
+- Product adoption analytics
+- Sales opportunity discovery
+
+---
+
+# Limitations
+
+- Taxonomy still benefits from periodic human review.
+- LLM inference introduces latency and API costs.
+- Call type detection depends on metadata quality.
+- Classification accuracy depends on transcript completeness.
+
+---
+
+# Future Enhancements
+
+Potential next steps include:
+
+- LangGraph-powered multi-agent workflow
+- MCP tool integrations
+- Retrieval-Augmented Generation (RAG)
+- Human-in-the-loop taxonomy approval
+- Streaming transcript ingestion
+- Continuous evaluation pipelines
+- Cost-aware model routing
+- Interactive dashboard
+
+---
+
+# Technologies Used
+
+### Languages
+
+- Python
+
+### AI
+
+- Claude Sonnet 4.5
+- OpenRouter API
+- Structured JSON Outputs
+
+### Data
+
+- Pandas
+- NumPy
+
+### Visualization
+
+- Matplotlib
+
+### Development
+
+- Jupyter Notebook
+- python-dotenv
+
+---
+
+# Deliverables
+
+This repository contains:
+
+- AI processing pipeline
+- Jupyter notebooks
+- Source code
+- Generated outputs
+- Business insights
+- Executive-ready visualizations
+
+---
+
+# Acknowledgements
+
+This project was developed as part of an Applied AI Engineering interview assignment and is intended solely for evaluation and portfolio purposes.
