@@ -448,4 +448,4 @@ This repository contains:
 
 # Acknowledgements
 
-This project was developed as part of an Applied AI Engineering interview assignment and is intended solely for evaluation and portfolio purposes.
+This project was developed as part of an Applied AI Engineering assignment and is intended solely for evaluation and portfolio purposes.
